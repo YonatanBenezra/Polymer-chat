@@ -1,0 +1,169 @@
+* {
+  --primary-color: #434343;
+  --secondary-color: #ff3d57;
+  --tertiary-color: #ffca00;
+  --success-color: #00d748;
+}
+
+.media-body {
+  padding-top: 2rem;
+}
+
+.answer {
+  display: block;
+  float: right;
+  padding: 0.2rem 5rem;
+  color: white;
+  background: rgb(67, 67, 67, 0.7);
+  border-radius: 12px;
+}
+
+.question {
+  padding: 0.2rem 5rem;
+  color: var(--primary-color);
+  background: var(--tertiary-color);
+  border-radius: 12px;
+}
+
+small {
+  font-family: 'Poppins', sans-serif;
+}
+
+.message-wrap {
+  height: 62vh;
+  min-height: 70vh;
+  max-height: 70vh;
+  margin-top: 2rem;
+  padding: 0;
+  overflow-y: scroll;
+  border-radius: 17px;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.robo-msg {
+  box-shadow: 0 0 29px 0 rgb(0 0 0 / 13%);
+}
+
+.msg {
+  margin: 0;
+  padding: 5px;
+}
+
+.msg-wrap {
+  max-height: 400px;
+  padding: 10px;
+  overflow: auto;
+}
+
+.time {
+  color: #bfbfbf;
+}
+
+.send-wrap {
+  margin-top: auto;
+  padding: 10px;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.send-message {
+  resize: none;
+}
+
+.send-message-btn {
+  margin-bottom: -5rem !important;
+}
+
+.highlight {
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+}
+
+.hr {
+  margin-top: 4rem;
+  border-bottom: 1px solid var(--secondary-color);
+  opacity: 0.3;
+}
+
+.robo-container {
+  display: flex;
+}
+
+.robo-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.green {
+  color: var(--success-color);
+}
+
+/* 
+@keyframes backAndForth {
+  0% {
+    left: 0;
+  }
+
+  50% {
+    left: 70vw;
+  }
+
+  100% {
+    left: 0;
+  }
+} */
+
+.curious-robo {
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  background-image: url('./images/curious-bot.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  /* animation-name: backAndForth;
+  animation-duration: 8s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite; */
+}
+
+.st0 {
+  opacity: 0.5;
+  fill: #d3d8f7;
+}
+
+.st1 {
+  fill: #70d8ff;
+}
+
+.st2 {
+  fill: none;
+  stroke: #70d8ff;
+  stroke-width: 3;
+  stroke-miterlimit: 10;
+}
+
+.st3 {
+  fill: #fff;
+}
+
+.st4 {
+  fill: none;
+  stroke: #70d8ff;
+  stroke-width: 4;
+  stroke-miterlimit: 10;
+}
+
+.st5 {
+  fill: none;
+  stroke: #70d8ff;
+  stroke-width: 5;
+  stroke-miterlimit: 10;
+}
