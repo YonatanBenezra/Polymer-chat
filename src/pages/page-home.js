@@ -44,26 +44,26 @@ export class PageHome extends observeState(PageElement) {
           </div>
           </div>
           <div class="message-wrap col-lg-12 " id="message-box">
-            ${myState.chat.map(
+            ${myState?.chat.map(
               (i) => html` <div class="media msg">
                 <div class="media-body">
                   <small class="pull-right time"
-                    ><i class="fa fa-clock-o"></i>${i.date}</small
+                    ><i class="fa fa-clock-o"></i>${i?.date}</small
                   >
                   ${i.question &&
                   html` <small style="display: block;"
-                    ><span class="question"> ${i.question} </span>
+                    ><span class="question"> ${i?.question} </span>
                   </small>`}
                   ${i.answer &&
                   html` <small style="display: block;" class="answer">
-                    ${i.answer}
+                    ${i?.answer}
                   </small>`}
                 </div>
               </div>`
             )}
           </div>
                   </div>
-          <div class="send-wrap ">
+          <div class="send-wrap">
             <div class="btn-panel">
                 <a
                   href=""
@@ -80,20 +80,12 @@ export class PageHome extends observeState(PageElement) {
                 rows="3"
                 placeholder="Question/Answer..."
                 .value="${this.msg}"
-                .onchange="${(e) => (this.msg = e.target.value)}"
+                .onchange="${(e) => (this.msg = e?.target?.value)}"
               ></textarea>
             </div>
           </div>
         </div>
       </div>`;
-  }
-
-  firstUpdated(changedProperties) {
-    changedProperties.forEach((oldValue, propName) => {
-      console.log(`${propName} changed. oldValue: ${oldValue}`);
-    });
-    const textArea = this.shadowRoot.getElementById(this.textAreaId);
-    textArea.focus();
   }
 
   sendMessage(e) {
@@ -170,8 +162,6 @@ export class PageHome extends observeState(PageElement) {
     });
 
     socket.on('receive_msg', (data) => {
-      var objDiv = document.getElementById('message-box');
-      objDiv.scrollTop = objDiv.scrollHeight;
       if (data) {
         if (data._id !== myState._id) {
           if (data.qid && data.qid !== myState.qid) {
@@ -202,15 +192,5 @@ export class PageHome extends observeState(PageElement) {
     });
   }
 }
-
-// input = document.getElementById("textArea");
-// console.log('now!')
-// input.addEventListener("keyup", function(event) {
-//   if (event.keyCode === 13) {
-//     console.log('enter')
-//     event.preventDefault();
-//     document.getElementById("sendBtn").click();
-//   }
-// });
 
 customElements.define('page-home', PageHome);
