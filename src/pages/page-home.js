@@ -16,7 +16,7 @@ export class PageHome extends observeState(PageElement) {
   static get properties() {
     return {
       msg: { type: String },
-      textAreaId: { type: String },
+      textAreaId: { type: String }
     };
   }
   constructor() {
@@ -37,7 +37,7 @@ export class PageHome extends observeState(PageElement) {
       <div class="robo-msg">
 
         <div class="robo-container">
-          <span class="curious-robo"></span>
+          <span id="curious-robo"></span>
           <div class="robo-text" >
             <h3>Botty</h3>
             <small class="green">Online</small>
@@ -88,69 +88,62 @@ export class PageHome extends observeState(PageElement) {
       </div>`;
   }
 
+  
   sendMessage(e) {
     if (this.msg.includes('?')) {
       const messages = this.searchQuestion(this.msg);
       let answers = [];
       answers = messages
-      .filter((i) => i.answer && i.answer)
-      .map((i) => i.answer);
+        .filter((i) => i.answer && i.answer)
+        .map((i) => i.answer);
       if (answers.length > 0) {
-        socket
-        .emit('send_msg', { msg: this.msg, _id: myState._id })
-        socket
-        .emit('send_msg', {
+        socket.emit('send_msg', { msg: this.msg, _id: myState._id });
+        socket.emit('send_msg', {
           msg: answers[0],
           _id: myState._id
-        })
+        });
       } else {
-        socket
-        .emit('send_msg', { msg: this.msg, _id: myState._id })
+        socket.emit('send_msg', { msg: this.msg, _id: myState._id });
       }
     } else {
-      socket
-      .emit('send_msg', { msg: this.msg, _id: myState._id })
+      socket.emit('send_msg', { msg: this.msg, _id: myState._id });
     }
     myState._id = null;
     this.msg = '';
   }
-  
+
   searchQuestion(question) {
     const lowercasedValue = question.toLowerCase().trim();
     const filteredData = myState.chat.filter((item) => {
       return ['question'].some(
         (key) =>
-        item['question'] &&
-        item['answer'] &&
-        item['question'].toString().toLowerCase().includes(lowercasedValue)
-        );
-      });
-      
-      return filteredData;
-    }
+          item['question'] &&
+          item['answer'] &&
+          item['question'].toString().toLowerCase().includes(lowercasedValue)
+      );
+    });
+
+    return filteredData;
+  }
+
+  socketRemoveListener() {
+    socket.off('send_msg_success');
+    socket.off('get_msg_success');
+    socket.off('send_msg_err');
+  }
+
+  socketAddListener() {
+    socket.on('get_msg_success', (data) => {
+      myState.chat = data;
+    });
     
-    socketRemoveListener() {
-      socket.off('send_msg_success');
-      socket.off('get_msg_success');
-      socket.off('send_msg_err');
-    }
-    
-    socketAddListener() {
-      socket.on('get_msg_success', (data) => {
-        var objDiv = document.getElementById('message-box');
-        objDiv.scrollTop = objDiv.scrollHeight;
-        myState.chat = data;
-      });
-      
-      socket.on('send_msg_success', (data) => {
-        var objDiv = document.getElementById('message-box');
-        objDiv.scrollTop = objDiv.scrollHeight;
-        if (data) {
-          if (data._id !== myState._id) {
-            if (data.qid && data.qid !== myState.qid) {
-              myState.qid = data.qid;
-              myState._id = data._id;
-              const prev = myState.chat.filter((i) => i._id === data.qid)[0];
+    socket.on('send_msg_success', (data) => {
+      if (data) {
+        if (data._id !== myState._id) {
+          if (data.qid && data.qid !== myState.qid) {
+            myState.qid = data.qid;
+            myState._id = data._id;
+            const prev = myState.chat.filter((i) => i._id === data.qid)[0];
             const allExpt = myState.chat.filter((i) => i._id !== data.qid);
             myState.chat = [...allExpt, { ...prev, answer: data.answer }];
           } else {
@@ -160,6 +153,7 @@ export class PageHome extends observeState(PageElement) {
         }
       }
     });
+
 
     socket.on('receive_msg', (data) => {
       if (data) {
@@ -179,7 +173,6 @@ export class PageHome extends observeState(PageElement) {
     });
 
     socket.on('search_msg_success', (data) => {
-      console.log('search_msg_success', data);
       if (data && data.length > 0 && data[0]._id !== myState._id) {
         myState._id = data[0]._id;
         myState.chat = [...myState.chat, ...data];
@@ -187,7 +180,6 @@ export class PageHome extends observeState(PageElement) {
     });
 
     socket.on('send_msg_err', (data) => {
-      console.log('send_msg_err', data);
       alert(data.err);
     });
   }
