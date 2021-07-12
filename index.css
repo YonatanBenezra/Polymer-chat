@@ -5,8 +5,18 @@
   --success-color: #00d748;
 }
 
+body {
+  overflow: hidden;
+}
+
 .media-body {
   padding-top: 2rem;
+  overflow: hidden;
+  zoom: 1;
+}
+
+.pull-right {
+  float: right;
 }
 
 .answer {
@@ -26,15 +36,15 @@
 }
 
 small {
+  font-size: 85%;
   font-family: 'Poppins', sans-serif;
 }
 
 .message-wrap {
-  height: 62vh;
-  min-height: 70vh;
-  max-height: 70vh;
-  margin-top: 2rem;
-  padding: 0;
+  position: relative;
+  max-height: 62vh;
+  padding-right: 15px;
+  padding-left: 15px;
   overflow-y: scroll;
   border-radius: 17px;
 }
@@ -65,18 +75,63 @@ small {
 }
 
 .send-wrap {
-  margin-top: auto;
+  box-sizing: border-box;
   padding: 10px;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
 }
 
 .send-message {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 6px 12px;
+  color: #555;
+  font-size: 14px;
+  font-family: inherit;
+  line-height: 1.428571429;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%);
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
   resize: none;
+}
+
+input,
+button,
+select,
+textarea {
+  margin: 0;
+  font-size: 100%;
+  font-family: inherit;
+  line-height: inherit;
+}
+
+textarea {
+  overflow: auto;
+  vertical-align: top;
+}
+
+*,
+*::before,
+*::after {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .send-message-btn {
   margin-bottom: -5rem !important;
+  padding-top: 0.2rem;
+  padding-right: 1rem;
+  color: var(--primary-color);
+  text-decoration: auto;
+}
+
+.send-message-btn:hover {
+  color: #555;
 }
 
 .highlight {
@@ -114,8 +169,14 @@ small {
   background-size: contain;
 }
 
-.curious-robo-gif {
+#animated {
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  height: 100px;
   background-image: url('./images/robo-gif.gif');
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .st0 {
@@ -150,4 +211,35 @@ small {
   stroke: #70d8ff;
   stroke-width: 5;
   stroke-miterlimit: 10;
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+
+.media {
+  margin-top: 15px;
+}
+
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.btn-panel {
+  box-sizing: border-box;
+}
+
+#textArea:focus-within {
+  border: 1px solid var(--primary-color);
+  outline: none !important;
+  box-shadow: 0 0 10px #719ece;
+}
+
+#curious-robo #textArea:focus-within {
+  background-image: url('./images/robo-gif.gif');
 }

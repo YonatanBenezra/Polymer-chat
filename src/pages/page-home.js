@@ -2,48 +2,26 @@ import { html } from 'lit';
 import { observeState } from 'lit-element-state';
 import { Logo, Feature } from '../components';
 import { urlForName } from '../router';
-import { PageElement } from '../helpers/page-element';
+import { Functions } from '../helpers/functions';
 import { myState } from '../states/chat';
+import { ifDefined } from 'lit-html/directives/if-defined';
 
-const SOCKET_URL = 'http://localhost:5000';
-const socket = io(SOCKET_URL);
-
-socket.emit('join', 'chatroom');
-
-socket.emit('get_msg', () => {});
-
-export class PageHome extends observeState(PageElement) {
-  static get properties() {
-    return {
-      msg: { type: String },
-      textAreaId: { type: String }
-    };
-  }
-  constructor() {
-    super();
-    this.msg = '';
-    this.socketRemoveListener();
-    this.socketAddListener();
-  }
-
+export class PageHome extends Functions {
   render() {
-    return html` <link
-        rel="stylesheet"
-        href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"
-      />
-      <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    return html`
       <div class="container">
       <div class="row">
       <div class="robo-msg">
 
         <div class="robo-container">
-          <span id="curious-robo"></span>
+          <span id=${this.animated ? 'animated' : 'curious-robo'}>
+        </span>
           <div class="robo-text" >
             <h3>Botty</h3>
             <small class="green">Online</small>
           </div>
           </div>
-          <div class="message-wrap col-lg-12 " id="message-box">
+          <div class="message-wrap" id="message-box">
             ${myState?.chat.map(
               (i) => html` <div class="media msg">
                 <div class="media-body">
@@ -67,7 +45,7 @@ export class PageHome extends observeState(PageElement) {
             <div class="btn-panel">
                 <a
                   href=""
-                  class=" col-lg-4 text-right btn   send-message-btn pull-right"
+                  class="send-message-btn pull-right"
                   id="sendBtn"
                   role="button"
                   @click="${this.sendMessage}"
@@ -76,9 +54,9 @@ export class PageHome extends observeState(PageElement) {
               </div>
               <textarea
                 class="form-control send-message"
-                id="${this.textAreaId}"
+                id="textArea"
                 rows="3"
-                placeholder="Question/Answer..."
+                placeholder="Question? / Answer"
                 .value="${this.msg}"
                 .onchange="${(e) => (this.msg = e?.target?.value)}"
               ></textarea>
@@ -86,102 +64,6 @@ export class PageHome extends observeState(PageElement) {
           </div>
         </div>
       </div>`;
-  }
-
-  
-  sendMessage(e) {
-    if (this.msg.includes('?')) {
-      const messages = this.searchQuestion(this.msg);
-      let answers = [];
-      answers = messages
-        .filter((i) => i.answer && i.answer)
-        .map((i) => i.answer);
-      if (answers.length > 0) {
-        socket.emit('send_msg', { msg: this.msg, _id: myState._id });
-        socket.emit('send_msg', {
-          msg: answers[0],
-          _id: myState._id
-        });
-      } else {
-        socket.emit('send_msg', { msg: this.msg, _id: myState._id });
-      }
-    } else {
-      socket.emit('send_msg', { msg: this.msg, _id: myState._id });
-    }
-    myState._id = null;
-    this.msg = '';
-  }
-
-  searchQuestion(question) {
-    const lowercasedValue = question.toLowerCase().trim();
-    const filteredData = myState.chat.filter((item) => {
-      return ['question'].some(
-        (key) =>
-          item['question'] &&
-          item['answer'] &&
-          item['question'].toString().toLowerCase().includes(lowercasedValue)
-      );
-    });
-
-    return filteredData;
-  }
-
-  socketRemoveListener() {
-    socket.off('send_msg_success');
-    socket.off('get_msg_success');
-    socket.off('send_msg_err');
-  }
-
-  socketAddListener() {
-    socket.on('get_msg_success', (data) => {
-      myState.chat = data;
-    });
-    
-    socket.on('send_msg_success', (data) => {
-      if (data) {
-        if (data._id !== myState._id) {
-          if (data.qid && data.qid !== myState.qid) {
-            myState.qid = data.qid;
-            myState._id = data._id;
-            const prev = myState.chat.filter((i) => i._id === data.qid)[0];
-            const allExpt = myState.chat.filter((i) => i._id !== data.qid);
-            myState.chat = [...allExpt, { ...prev, answer: data.answer }];
-          } else {
-            myState._id = data._id;
-            myState.chat = [...myState.chat, data];
-          }
-        }
-      }
-    });
-
-
-    socket.on('receive_msg', (data) => {
-      if (data) {
-        if (data._id !== myState._id) {
-          if (data.qid && data.qid !== myState.qid) {
-            myState.qid = data.qid;
-            myState._id = data._id;
-            const prev = myState.chat.filter((i) => i._id === data.qid)[0];
-            const allExpt = myState.chat.filter((i) => i._id !== data.qid);
-            myState.chat = [...allExpt, { ...prev, answer: data.answer }];
-          } else {
-            myState._id = data._id;
-            myState.chat = [...myState.chat, data];
-          }
-        }
-      }
-    });
-
-    socket.on('search_msg_success', (data) => {
-      if (data && data.length > 0 && data[0]._id !== myState._id) {
-        myState._id = data[0]._id;
-        myState.chat = [...myState.chat, ...data];
-      }
-    });
-
-    socket.on('send_msg_err', (data) => {
-      alert(data.err);
-    });
   }
 }
 
