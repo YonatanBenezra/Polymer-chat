@@ -13,12 +13,10 @@ socket.emit('join', 'chatroom');
 socket.emit('get_msg', () => {});
 
 export class Functions extends observeState(PageElement) {
-
   static get properties() {
     return {
       msg: { type: String },
-      textAreaId: { type: String },
-      animated: {type: Boolean}
+      animated: { type: Boolean }
     };
   }
   constructor() {
@@ -28,9 +26,9 @@ export class Functions extends observeState(PageElement) {
     this.socketRemoveListener();
     this.socketAddListener();
   }
+
   sendMessage(e) {
     if (this.msg.includes('?')) {
-      this.animated = true
       const messages = this.searchQuestion(this.msg);
       let answers = [];
       answers = messages
@@ -50,6 +48,9 @@ export class Functions extends observeState(PageElement) {
     }
     myState._id = null;
     this.msg = '';
+    this.animated = true;
+    var objDiv = document.getElementById('message-box');
+    objDiv.scrollTop = objDiv.scrollHeight;
   }
 
   searchQuestion(question) {
@@ -75,6 +76,8 @@ export class Functions extends observeState(PageElement) {
   socketAddListener() {
     socket.on('get_msg_success', (data) => {
       myState.chat = data;
+      var objDiv = document.getElementById('message-box');
+      objDiv.scrollTop = objDiv.scrollHeight;
     });
 
     socket.on('send_msg_success', (data) => {
@@ -95,7 +98,6 @@ export class Functions extends observeState(PageElement) {
     });
 
     socket.on('receive_msg', (data) => {
-      
       if (data) {
         if (data._id !== myState._id) {
           if (data.qid && data.qid !== myState.qid) {

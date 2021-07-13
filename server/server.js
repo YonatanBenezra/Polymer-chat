@@ -10,10 +10,8 @@ const {
   Types: { ObjectId }
 } = require('mongoose');
 
-//CORS
 app.use(cors());
 
-//CONNECT MONGO
 const connect = mongoose.connect(
   'mongodb+srv://yonatan:forForter@chatbot.rfzcn.mongodb.net/chat?retryWrites=true&w=majority',
   {

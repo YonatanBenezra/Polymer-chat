@@ -12,8 +12,8 @@ export class PageHome extends Functions {
       <div class="container">
       <div class="row">
       <div class="robo-msg">
-
-        <div class="robo-container">
+      <!-- <div class="thought">This is a thought bubble.</div> -->
+          <div class="robo-container">
           <span id=${this.animated ? 'animated' : 'curious-robo'}>
         </span>
           <div class="robo-text" >
