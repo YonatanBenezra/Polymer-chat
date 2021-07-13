@@ -30,7 +30,6 @@ connect.then(
   }
 );
 
-//SOCKET INIT
 const io = socketio(server, { cors: { origin: '*' } });
 io.on('connection', async (socket) => {
   console.log('someone joined!');

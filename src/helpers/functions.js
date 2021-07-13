@@ -22,6 +22,7 @@ export class Functions extends observeState(PageElement) {
   constructor() {
     super();
     this.msg = '';
+    this.input = '';
     this.animated = false;
     this.socketRemoveListener();
     this.socketAddListener();
@@ -49,8 +50,6 @@ export class Functions extends observeState(PageElement) {
     myState._id = null;
     this.msg = '';
     this.animated = true;
-    var objDiv = document.getElementById('message-box');
-    objDiv.scrollTop = objDiv.scrollHeight;
   }
 
   searchQuestion(question) {
@@ -76,8 +75,10 @@ export class Functions extends observeState(PageElement) {
   socketAddListener() {
     socket.on('get_msg_success', (data) => {
       myState.chat = data;
-      var objDiv = document.getElementById('message-box');
-      objDiv.scrollTop = objDiv.scrollHeight;
+      setTimeout(function () {
+        var objDiv = document.getElementById('message-box');
+        objDiv.scrollTop = objDiv.scrollHeight;
+      }, 1);
     });
 
     socket.on('send_msg_success', (data) => {
@@ -119,6 +120,10 @@ export class Functions extends observeState(PageElement) {
         myState._id = data[0]._id;
         myState.chat = [...myState.chat, ...data];
       }
+      setTimeout(function () {
+        var objDiv = document.getElementById('message-box');
+        objDiv.scrollTop = objDiv.scrollHeight;
+      }, 1);
     });
 
     socket.on('send_msg_err', (data) => {

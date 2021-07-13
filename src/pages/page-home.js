@@ -26,7 +26,7 @@ export class PageHome extends Functions {
               (i) => html` <div class="media msg">
                 <div class="media-body">
                   <small class="pull-right time"
-                    ><i class="fa fa-clock-o"></i>${i?.date}</small
+                    ><i class="date"></i>${i?.date}</small
                   >
                   ${i.question &&
                   html` <small style="display: block;"
@@ -46,11 +46,10 @@ export class PageHome extends Functions {
                 <a
                   href=""
                   class="send-message-btn pull-right"
-                  id="sendBtn"
+                  id="send-btn"
                   role="button"
                   @click="${this.sendMessage}"
-                  ><i class="fa fa-plus"></i> Send</a
-                >
+                  ></a>
               </div>
               <textarea
                 class="form-control send-message"
